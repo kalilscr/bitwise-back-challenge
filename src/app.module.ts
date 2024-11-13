@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { ormConfig } from '../mikro-orm.config';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import ormConfig from '../mikro-orm.config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
