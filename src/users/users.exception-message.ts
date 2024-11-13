@@ -1,5 +1,5 @@
-export enum USERS_EXCEPTIONS_MESSAGES {
+export enum USERS_EXCEPTION_MESSAGES {
   ALREADY_EXISTS = 'User already exists.',
-  INVALID_INFORMATION = 'Invalid information.',
   NOT_FOUND = 'User not found.',
+  LIMIT_EXCEEDED = 'Limit exceeded.',
 }
