@@ -52,7 +52,6 @@ export class CreateUserRequestDTO implements IUser {
   @IsString()
   @IsAlpha()
   @IsOptional()
-  //@Transform((value: TransformFnParams) => value.value.trim().toUpperCase())
   @IsIn(['Male', 'Female'])
   gender?: Gender;
 }
@@ -102,11 +101,3 @@ export class UpdateUserRequestDTO implements IUpdateUser {
   @IsIn(['Male', 'Female'])
   gender: Gender;
 }
-
-// export class GetUserRequestDTO {
-//   @IsAlphanumeric()
-//   @MinLength(5)
-//   @MaxLength(30)
-//   @IsNotEmpty()
-//   username: string;
-// }

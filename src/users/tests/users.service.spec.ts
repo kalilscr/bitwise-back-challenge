@@ -6,7 +6,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Keyv } from 'keyv';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CacheService } from '../../cache/cache.service';
 import { UserEntity } from '../../entities/users.entity';
