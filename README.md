@@ -8,6 +8,7 @@ some technologies used:
 - nestjs
 - biomejs
 - supertest
+- cache with redis
 
 ## Project setup
 
@@ -22,7 +23,7 @@ $ pnpm install
 
 ```bash
 
-# up the postgres database image
+# up the postgres and redis image
 $ docker compose up
 
 # watch mode

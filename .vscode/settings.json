@@ -13,7 +13,8 @@
     "quickfix.biome": "explicit",
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
-  }
+  },
+  "vitest.disableWorkspaceWarning": true
 }
 
 // {

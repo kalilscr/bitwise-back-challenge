@@ -2,6 +2,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import ormConfig from '../mikro-orm.config';
+import { KeyvModule } from './cache/cache.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -9,6 +10,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({ isGlobal: true }),
     MikroOrmModule.forRoot(ormConfig),
     UsersModule,
+    KeyvModule,
   ],
 })
 export class AppModule {}

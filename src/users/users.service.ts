@@ -6,6 +6,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { CacheService } from '../cache/cache.service';
 import { UserEntity } from '../entities/users.entity';
 import {
   CreateUserFromGithubRequestDTO,
@@ -27,6 +28,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: EntityRepository<UserEntity>,
+    private readonly cacheService: CacheService,
   ) {}
 
   public async createUser(user: CreateUserRequestDTO): Promise<void> {
@@ -184,11 +186,19 @@ export class UsersService {
       throw new NotFoundException(USERS_EXCEPTION_MESSAGES.NOT_FOUND);
     }
 
-    const userInfo = await this.fetchGithubUserInfo(username);
+    const cacheKey = `getUser-${username}`;
+    const cachedUser: IGetUserResponse = await this.cacheService.get(cacheKey);
 
-    const user = await this.getUserResponseFactory(userExists, userInfo);
+    if (!cachedUser) {
+      const userInfo = await this.fetchGithubUserInfo(username);
 
-    return user;
+      const user = await this.getUserResponseFactory(userExists, userInfo);
+
+      await this.cacheService.set(cacheKey, user, 60 * 1000); // Cache for 1 minute
+      return user;
+    }
+
+    return cachedUser;
   }
 
   public async getUserResponseFactory(
@@ -215,14 +225,22 @@ export class UsersService {
         USERS_EXCEPTION_MESSAGES.LIMIT_EXCEEDED,
       );
     }
-    const users = await this.usersRepository
-      .getEntityManager()
-      .find(
-        UserEntity,
-        { name: { $ilike: `%${keyword}%` } },
-        { orderBy: { id: 'desc' }, first: limit, offset: after },
-      );
+    const cacheKey = `getUsersByName-${keyword}`;
+    const cachedUsers: IUserEntity[] = await this.cacheService.get(cacheKey);
 
-    return users;
+    if (!cachedUsers) {
+      const users = await this.usersRepository
+        .getEntityManager()
+        .find(
+          UserEntity,
+          { name: { $ilike: `%${keyword}%` } },
+          { orderBy: { id: 'desc' }, first: limit, offset: after },
+        );
+
+      await this.cacheService.set(cacheKey, users, 60 * 1000); // Cache for 1 minute
+      return users;
+    }
+
+    return cachedUsers;
   }
 }
